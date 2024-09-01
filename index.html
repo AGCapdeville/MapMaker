@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Map Maker</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="sidebar">
+
+                <div class="sidebar_title">MAP MAKER</div>
+                <input class="button" type="button" value="Save Map JSON" onclick="saveMapToJSON()">
+                <input class="button" type="button" value="Load Map JSON">
+
+                <div class="sidebar_title">Terrain</div>
+                <div id="terrainTiles" class="tileContainer" >
+                    <button id="tileButton" class="tileButton dirt defaultState" value="dirt" onclick="selectTile(this);">Dirt</button>
+                    <button id="tileButton" class="tileButton grass defaultState" value="grass" onclick="selectTile(this);">Grass</button>
+                    <button id="tileButton" class="tileButton stone defaultState" value="stone" onclick="selectTile(this);">Stone</button>
+                    <button id="tileButton" class="tileButton river defaultState" value="river" onclick="selectTile(this);">River</button>
+                    <!-- <button id="tileButton" class="tileButton asthetic defaultState" value="asthetic" onclick="selectTile(this);">Asthetic</button> -->
+                </div>
+
+                <div class="sidebar_title">Walls</div>
+                <div id="wallTiles" class="tileContainer" >
+                    <button id="tileButton" class="tileButton stoneWall defaultState" value="stoneWall" onclick="selectTile(this);">Stone</button>
+                </div>
+
+                <div class="sidebar_title">Objective</div>
+                <div id="objectiveTiles" class="tileContainer" >
+                    <button id="tileButton" class="tileButton hero defaultState" value="hero" onclick="selectTile(this);">Hero</button>
+                    <button id="tileButton" class="tileButton nightmare defaultState" value="nightmare" onclick="selectTile(this);">Nightmare</button>
+                </div>
+
+                <div class="sidebar_title">Tools</div>
+                <div id="objectiveTiles" class="tileContainer" >
+                    <button id="tileButton"class="tileButton eraser defaultState" value="eraser" onclick="selectTile(this);">Erase</button>
+                </div>
+
+                <div class="sidebar_title">Size</div>
+                <div id="objectiveTiles" class="tileContainer" >
+                    <div class="sizeInput">
+                        <input id="sizeInputRow" type="number" class="no-arrows" id="rows" name="rows" min="1" max="100" value="1">
+                        X
+                        <input id="sizeInputCol" type="number" class="no-arrows" id="rows" name="rows" min="1" max="100" value="1">
+                    </div>
+                    <button class="sizeButton" onclick="changeMapTo(8,8);">8 x 8</button>
+                    <button class="sizeButton" onclick="changeMapTo(8, 11);">8 x 11</button>
+                    <button class="sizeButton" onclick="changeMapTo(16, 22);">16 x 22</button>
+                </div>
+
+            </div>
+            <div class="content">
+                
+                <div class="sidebar_title" style="display: flex; width: 100%;">
+                    Current Tile: <div id="currentTile">[0,0]</div>
+                </div>
+
+                <div id="map" class="grid-container"> </div>
+            </div>
+        </div>
+        <script src='func.js'></script>
+    </body>
+</html>

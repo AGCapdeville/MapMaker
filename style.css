@@ -1,0 +1,226 @@
+:root {
+    --onyx: #393e41ff;
+    --timberwolf: #d3d0cbff;
+    --platinum: #e7e5dfff;
+    --giants-orange: #ff521bff;
+    --navy: #2c3e50;
+
+    --dirt: #402a23;
+    --grass: #234028;
+    --stone: #505050;
+    --river: #00539a;
+
+    --stoneWall: #2e2e2e;
+
+    --hero: green;
+    --nightmare: purple;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    color:white;
+}
+
+.container {
+    display: flex;
+    height: 100vh; /* Full viewport height */
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 20%; /* Sidebar takes up 20% of the width */
+    background-color: var(--navy); /* Dark background color for the sidebar */
+    padding: 20px; /* Padding inside the sidebar */
+    box-sizing: border-box; /* Include padding in the width */
+    align-items: center;
+}
+
+.sidebar_title {
+    margin: 5px;
+}
+
+.button {
+    margin: 5px;
+}
+
+.selectedTile {
+    border: 1px solid rgb(245, 245, 245);
+}
+
+.defaultState {
+    border: 1px solid rgba(245, 245, 245, 0);
+}
+
+.tileContainer {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+/* TERRAIN CSS */
+.dirt {
+    background-color: var(--dirt);
+}
+.grass {
+    background-color: var(--grass);
+}
+.stone {
+    background-color: var(--stone);
+}
+.river {
+    background-color: var(--river);
+}
+
+.stoneWall {
+    background-color: var(--stoneWall);
+}
+
+/* OBJECT CSS */
+.hero {
+    background-color: var(--hero);
+}
+.nightmare {
+    background-color: var(--nightmare);
+}
+
+/* Tools CSS */
+.eraser {
+    background-color: black;
+}
+
+/* Size CSS */
+.sizeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    width: 100%;
+    border-radius: 8px;
+    padding: 3px;
+    color: whitesmoke;
+    background-color: black; /* Darker green on hover */
+    font-weight: bold;
+    border: 1px solid rgba(245, 245, 245, 0);
+}
+
+.sizeButton:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.sizeButton:active {
+    background-color: #3e8e41; /* Even darker green on click */
+    transform: translateY(2px); /* Slightly move down on click */
+}
+
+.tileButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    width: 100%;
+    border-radius: 8px;
+    padding: 3px;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+.tileButton:active {
+    transform: translateY(2px); /* Slightly move down on click */
+}
+
+.tileButton:hover {
+    border: 1px solid rgb(245, 245, 245);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%; /* Content area takes up the remaining 80% */
+    background-color: #16202a ; /* Dark background color for the sidebar */
+    padding: 20px; /* Padding inside the content area */
+    box-sizing: border-box; /* Include padding in the width */
+}
+
+
+/* Create a container for the grid */
+.grid-container {
+    display: grid;
+    grid-template-rows: repeat(33, 0fr); /* Creates 5 equal columns */
+    grid-template-columns: repeat(45, 0fr); /* Creates 5 equal columns */
+}
+
+.cell {
+    background-color: darkslategray; /* Button color */
+    cursor: pointer;
+    border: none;
+}
+
+/* Style the buttons */
+.space {
+    background-color: whitesmoke; /* Button color */
+    width: 30px;
+    height: 30px;
+}
+
+/* Style the buttons */
+.void {
+    background-color: black; /* Button color */
+    width: 10px;
+    height: 10px;
+}
+
+.horizontal-wall {
+    background-color: rgb(200, 200, 200); /* Button color */
+    width: 30px;
+    height: 10px;
+}
+
+.vertical-wall {
+    background-color: rgb(200, 200, 200);; /* Button color */
+    width: 10px;
+    height: 30px;
+}
+
+/* Button hover effect */
+.space:hover {
+    background-color: #45a049;
+}
+.horizontal-wall:hover {
+    background-color: #45a049;
+}
+.vertical-wall:hover {
+    background-color: #45a049;
+}
+
+
+/* Hide the arrows in Chrome, Safari, Edge, and Opera */
+.no-arrows::-webkit-inner-spin-button,
+.no-arrows::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+/* Hide the arrows in Firefox */
+.no-arrows {
+    margin: 5px;
+    width: 30px;
+    height: 20px;
+    text-align: center;
+    background-color: black;
+    color: whitesmoke;
+    font-weight: bold;
+    -moz-appearance: textfield;
+    border-style: none;
+    border-radius: 8px;
+}
+
+.sizeInput {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
