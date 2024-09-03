@@ -135,12 +135,42 @@ function saveMapToJSON() {
         let tileObj = {};
         // console.log(tile.getAttribute("position"));
         let position = tile.getAttribute("position").split(',');
-        tileObj.position = position[1] + ',0,' + position[0];
-        // if (tileObj.style.backgroundColor) 
-        // console.log(tile.style.backgroundColor);
-        // window.getComputedStyle(element).backgroundColor;
 
-        console.log(window.getComputedStyle(tile).backgroundColor);
+        if (tile.innerHTML) {
+            console.log(tile.children[0].id);
+,            tile.obj = tile.children[0].id;
+        }
+
+        let cell = "space"
+        switch (window.getComputedStyle(tile).backgroundColor) {
+            case "rgb(245, 245, 245)": // empty space
+                cell = "space";
+                break;
+            case "rgb(0, 0, 0)":
+                cell = "void";
+                break;
+            case "rgb(64, 42, 35)":
+                cell = "dirt";
+                break;
+            case "rgb(35, 64, 40)":
+                cell = "grass";
+                break;
+            case "rgb(80, 80, 80)":
+                cell = "stone";
+                break;
+            case "rgb(0, 83, 154)":
+                cell = "river";
+                break;
+            case "rgb(46, 46, 46)":
+                cell = "stone wall";
+            case "rgb(200, 200, 200)":
+                cell = "no wall";
+            default:
+                cell = "space";
+                break;
+        }
+        tileObj.cell = cell; // [space, void, wall, dirt, grass, stone, river]
+
 
         //TODO: create a dictionary of tiles so to create complex unity
         
