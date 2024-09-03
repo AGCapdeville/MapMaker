@@ -5,15 +5,16 @@
     --giants-orange: #ff521bff;
     --navy: #2c3e50;
 
-    --dirt: #402a23;
-    --grass: #234028;
-    --stone: #505050;
-    --river: #00539a;
+    --space: rgb(245, 245, 245);
+    --dirt: rgb(64, 42, 35);
+    --grass: rgb(35, 64, 40);
+    --stone: rgb(80, 80, 80);
+    --river: rgb(0, 83, 154);
 
-    --stoneWall: #2e2e2e;
+    --stone-wall: rgb(46, 46, 46);
 
-    --hero: green;
-    --nightmare: purple;
+    --hero-spawn: rgb(0, 128, 0);
+    --nightmare-spawn: rgb(128, 0, 128);
 }
 
 body, html {
@@ -75,16 +76,16 @@ body, html {
     background-color: var(--river);
 }
 
-.stoneWall {
-    background-color: var(--stoneWall);
+.stone-wall {
+    background-color: var(--stone-wall);
 }
 
 /* OBJECT CSS */
-.hero {
-    background-color: var(--hero);
+.hero-spawn {
+    background-color: var(--hero-spawn);
 }
-.nightmare {
-    background-color: var(--nightmare);
+.nightmare-spawn {
+    background-color: var(--nightmare-spawn);
 }
 
 /* Tools CSS */
@@ -163,7 +164,7 @@ body, html {
 
 /* Style the buttons */
 .space {
-    background-color: whitesmoke; /* Button color */
+    background-color: var(--space); /* Button color */
     width: 30px;
     height: 30px;
 }

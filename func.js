@@ -1,7 +1,7 @@
 
 const terrainTileTypes = ["dirt", "grass", "stone", "river"];
-const objectTypes = ["hero", "nightmare"];
-const wallTypes = ["stoneWall"];
+const objectTypes = ["hero-spawn", "nightmare-spawn"];
+const wallTypes = ["stone-wall"];
 
 let IS_DRAGGING = false;
 
@@ -62,8 +62,10 @@ function changeMapTo(row_length, col_length) {
 function loadPrevState() {
     prevSelectedTileType = localStorage.getItem("tileType");
     const prevButton = document.querySelector('button[value="'+ prevSelectedTileType + '"]');
-    prevButton.classList.remove("defaultState");
-    prevButton.classList.add("selectedTile");
+    if (prevButton) {
+        prevButton.classList.remove("defaultState");
+        prevButton.classList.add("selectedTile");
+    }
 }
 
 function selectTile(element) {
@@ -116,33 +118,22 @@ function paintWall(element) {
 
 function saveMapToJSON() {
     const tiles = document.querySelectorAll('.grid-container button');
-    let JSON = [];
 
-
-    // Dynamically adding properties
-    // dynamicObject.name = "Jane Doe";
-    // dynamicObject.age = 25;
-    // dynamicObject.skills = ["Python", "Django"];
-    // dynamicObject.address = {
-    //     street: "456 Elm St",
-    //     city: "Othertown",
-    //     zip: "67890"
-    // };
-
-    let objArray = [];
+    let tileObjectDictionary = {};
 
     tiles.forEach(tile => {
-        let tileObj = {};
-        // console.log(tile.getAttribute("position"));
+        let tileObject = {};
         let position = tile.getAttribute("position").split(',');
 
         if (tile.innerHTML) {
-            console.log(tile.children[0].id);
-,            tile.obj = tile.children[0].id;
+            tileObject.obj = tile.children[0].id;
+        } else {
+            tileObject.obj = null;
         }
 
         let cell = "space"
-        switch (window.getComputedStyle(tile).backgroundColor) {
+        let color = window.getComputedStyle(tile).backgroundColor;
+        switch (color) {
             case "rgb(245, 245, 245)": // empty space
                 cell = "space";
                 break;
@@ -162,25 +153,61 @@ function saveMapToJSON() {
                 cell = "river";
                 break;
             case "rgb(46, 46, 46)":
-                cell = "stone wall";
+                cell = "stone-wall";
+                break;
             case "rgb(200, 200, 200)":
-                cell = "no wall";
+                cell = "no-wall";
+                break;
             default:
                 cell = "space";
                 break;
         }
-        tileObj.cell = cell; // [space, void, wall, dirt, grass, stone, river]
-
-
-        //TODO: create a dictionary of tiles so to create complex unity
-        
-        // switch (tile.style.backgroundColor) {
-        //     case "#1234":
-        //         break;
-        //     default:
-        //         break;
-        // }
+        tileObject.cell = cell; // [space, void, stone-wall, no-wall, dirt, grass, stone, river]
+        tileObjectDictionary[position[1] + ",0," + position[0]] = tileObject; // Filped due to X being horizontal & Z is depth
     });
+
+
+    const validSpaces = ["space", "dirt", "grass", "stone", "river"];
+    const walls = ["stone-wall"];
+    const cardinal_directions = [{x: 0, z: 1}, {x: 1, z: 0}, {x: 0, z: -1}, {x: -1, z: 0}];
+
+    // tileObjectDictionary.forEach((key, value) => {
+    Object.entries(tileObjectDictionary).forEach(([key, value]) => {
+
+        if (validSpaces.includes(value.cell)) {
+            
+            let current_x = Number(key.split(',')[0]);
+            let current_z = Number(key.split(',')[2]);
+
+            cardinal_directions.forEach((diriection) => {
+
+                let check_position = (current_x + diriection.x) + ",0," + (current_z + diriection.z);
+
+                if (walls.includes(tileObjectDictionary[check_position].cell)) {
+                    tileObjectDictionary[key][check_position] = "stone-wall";
+                } else {
+                    tileObjectDictionary[key][check_position] = "no-wall";
+                }
+            });
+        }
+    });
+
+    console.log(tileObjectDictionary);
+
+    // Convert the JSON object to a string and then to a Blob
+    let jsonString = JSON.stringify(tileObjectDictionary, null, 2);
+    let blob = new Blob([jsonString], { type: 'application/json' });
+
+    // Create a link element, use it to download the JSON file
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = 'map_data.json'; // Default file name
+    document.body.appendChild(a);
+    a.click(); // Trigger the download
+    document.body.removeChild(a); // Clean up
+    URL.revokeObjectURL(url); // Release the object URL
+
 }
 
 onload = changeMapTo(8,8);
