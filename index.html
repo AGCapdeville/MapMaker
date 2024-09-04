@@ -9,8 +9,12 @@
             <div class="sidebar">
 
                 <div class="sidebar_title">MAP MAKER</div>
-                <input class="button" type="button" value="Save Map JSON" onclick="saveMapToJSON()">
-                <input class="button" type="button" value="Load Map JSON">
+                <input class="json-button" type="button" value="Save Map JSON" onclick="saveMapToJSON()">
+
+                <label for="fileInput" class="json-button">Load Map JSON</label>
+                <input type="file" id="fileInput" class="hide" accept=".json" onchange="loadJSONMap(this)">
+                <span id="fileName" class="file-upload-label">No file selected</span>
+
 
                 <div class="sidebar_title">Terrain</div>
                 <div id="terrainTiles" class="tileContainer" >
@@ -18,7 +22,6 @@
                     <button id="tileButton" class="tileButton grass defaultState" value="grass" onclick="selectTile(this);">Grass</button>
                     <button id="tileButton" class="tileButton stone defaultState" value="stone" onclick="selectTile(this);">Stone</button>
                     <button id="tileButton" class="tileButton river defaultState" value="river" onclick="selectTile(this);">River</button>
-                    <!-- <button id="tileButton" class="tileButton asthetic defaultState" value="asthetic" onclick="selectTile(this);">Asthetic</button> -->
                 </div>
 
                 <div class="sidebar_title">Walls</div>

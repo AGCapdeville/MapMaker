@@ -12,6 +12,9 @@ function changeMapTo(row_length, col_length) {
     gridContainer.style.gridTemplateRows = `repeat(${row_length * 2 + 1}, 0fr)`;
     gridContainer.style.gridTemplateColumns = `repeat(${col_length * 2 + 1}, 0fr)`;
 
+    localStorage.setItem("rows", row_length);
+    localStorage.setItem("cols", col_length);
+
     // for (let row = 0; row < (row_length * 2 + 1); row++) {
     //     for (let col = 0; col < (col_length * 2 + 1); col++) {
             
@@ -118,7 +121,6 @@ function paintWall(element) {
 
 function saveMapToJSON() {
     const tiles = document.querySelectorAll('.grid-container button');
-
     let tileObjectDictionary = {};
 
     tiles.forEach(tile => {
@@ -184,18 +186,26 @@ function saveMapToJSON() {
                 let check_position = (current_x + diriection.x) + ",0," + (current_z + diriection.z);
 
                 if (walls.includes(tileObjectDictionary[check_position].cell)) {
-                    tileObjectDictionary[key][check_position] = "stone-wall";
+                    tileObjectDictionary[key][(diriection.x + ",0," + diriection.z)] = "stone-wall";
                 } else {
-                    tileObjectDictionary[key][check_position] = "no-wall";
+                    tileObjectDictionary[key][(diriection.x + ",0," + diriection.z)] = "no-wall";
                 }
             });
         }
     });
 
-    console.log(tileObjectDictionary);
+    let onlySpacesDictionary = {};
+    Object.entries(tileObjectDictionary).forEach(([key, value]) => {
+        if (validSpaces.includes(value.cell)) {
+            onlySpacesDictionary[(key.split(',')[0]/2 - 0.5) + ',0,' + (key.split(',')[2]/2 - 0.5)] = value;
+        }
+    });
+
+    onlySpacesDictionary["rows"] = localStorage.getItem("rows");
+    onlySpacesDictionary["cols"] = localStorage.getItem("cols");
 
     // Convert the JSON object to a string and then to a Blob
-    let jsonString = JSON.stringify(tileObjectDictionary, null, 2);
+    let jsonString = JSON.stringify(onlySpacesDictionary, null, 2);
     let blob = new Blob([jsonString], { type: 'application/json' });
 
     // Create a link element, use it to download the JSON file
@@ -207,6 +217,51 @@ function saveMapToJSON() {
     a.click(); // Trigger the download
     document.body.removeChild(a); // Clean up
     URL.revokeObjectURL(url); // Release the object URL
+
+}
+
+function loadJSONMap(inputElement) {
+    const file = inputElement.files[0]; // Get the selected file
+    const fileNameLabel = document.getElementById('fileName');
+
+    let loadedJSON = {};
+    if (file) {
+        fileNameLabel.textContent = fileInput.files[0].name;
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const jsonData = JSON.parse(event.target.result);
+
+            for (let key in jsonData) {
+                if (jsonData.hasOwnProperty(key)) {
+                    loadedJSON[key] = jsonData[key];
+                }
+            }
+
+            if (!loadedJSON.hasOwnProperty("0,0,0")) {
+                console.log('Foundation Key Not Found!');
+            } else {
+                console.log(loadedJSON);
+                handleLoadedJSON(loadedJSON);
+            }
+
+        };
+        reader.readAsText(file);
+    } else {
+        console.log('No file selected');
+    }
+}
+
+function handleLoadedJSON(JSON) {
+    changeMapTo(JSON.rows,JSON.cols);
+    
+    for (let row = 0; row < JSON.rows; row++) {
+        for (let col = 0; col < JSON.cols; col++) {
+            shiftedRow = 2 * row + 1;
+            shiftedCol = 2 * col + 1;
+            console.log(shiftedRow + "," + shiftedCol);          
+        }
+    }
 
 }
 

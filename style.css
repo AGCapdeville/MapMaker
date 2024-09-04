@@ -44,8 +44,18 @@ body, html {
     margin: 5px;
 }
 
-.button {
+.json-button {
     margin: 5px;
+    font-size: small;
+    background: whitesmoke;
+    width: 100%;
+    color: black;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.json-button:hover {
+    transform: translateY(-2px) translateX(-1px);
 }
 
 .selectedTile {
@@ -224,4 +234,15 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.hide {
+    display: none;
+}
+
+.file-upload-label {
+    width: 100%;
+    text-align: center;
+    font-size: small;
+    margin-bottom: 20px;
 }
