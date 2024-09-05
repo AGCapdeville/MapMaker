@@ -93,20 +93,23 @@ function paintSpace(element) {
     if (terrainTileTypes.includes(type)) {
         element.style.backgroundColor = "var(--" + type + ")";
     } else if (objectTypes.includes(type)) {
-        element.innerHTML = "";
-
-        let obj = document.createElement("div");
-        obj.id = type;
-        obj.style.backgroundColor = "var(--" + type + ")";
-        obj.style.width = "20px";
-        obj.style.height = "20px";
-
-        element.appendChild(obj);
+        paintObject(element, type);
     } else if (type == "eraser") {
         element.innerHTML = "";
         element.style = "";
-
     }
+}
+
+function paintObject(element, type) {
+    element.innerHTML = "";
+
+    let obj = document.createElement("div");
+    obj.id = type;
+    obj.style.backgroundColor = "var(--" + type + ")";
+    obj.style.width = "20px";
+    obj.style.height = "20px";
+
+    element.appendChild(obj);
 }
 
 function paintWall(element) {
@@ -246,7 +249,7 @@ function loadJSONMap(inputElement) {
             }
 
         };
-        reader.readAsText(file);
+        reader.readAsText(file);    
     } else {
         console.log('No file selected');
     }
@@ -255,14 +258,51 @@ function loadJSONMap(inputElement) {
 function handleLoadedJSON(JSON) {
     changeMapTo(JSON.rows,JSON.cols);
     
+    const tiles = document.querySelectorAll('.grid-container button');
+
+    console.log('[' + JSON.rows + ',' + JSON.cols + ']');
+
     for (let row = 0; row < JSON.rows; row++) {
         for (let col = 0; col < JSON.cols; col++) {
             shiftedRow = 2 * row + 1;
             shiftedCol = 2 * col + 1;
-            console.log(shiftedRow + "," + shiftedCol);          
+
+            let currentSpace = document.querySelector('button[position="' + shiftedRow + ',' + shiftedCol +'"]');
+            let currentJSONTile = JSON[row + ',0,' + col];
+
+            console.log("test: loc:[" + row + ',' + col + ']');
+            console.log(currentJSONTile);
+
+            currentSpace.style.backgroundColor = "var(--" + currentJSONTile.cell + ')'; 
+
+            if (currentJSONTile.hasOwnProperty("obj")) {
+                paintObject(currentSpace, currentJSONTile.obj);
+            }
+
+            let right = currentJSONTile["1,0,0"];
+            let left = currentJSONTile["-1,0,0"];
+            let top = currentJSONTile["0,0,1"];
+            let bot = currentJSONTile["0,0,-1"];
+
+            if (right == "stone-wall") {
+                let wallTile = document.querySelector('button[position="' + shiftedRow + ',' + (shiftedCol + 1) +'"]');
+                wallTile.style.backgroundColor = "var(--" + right + ")";
+            }
+            // if (left == "stone-wall") {
+            //     let wallTile = document.querySelector('button[position="' + shiftedCol + ',' + (shiftedRow - 1) +'"]');
+            //     wallTile.style.backgroundColor = "var(--" + left + ")";
+            // }
+            // if (top == "stone-wall") {
+            //     let wallTile = document.querySelector('button[position="' + (shiftedCol + 1) + ',' + shiftedRow +'"]');
+            //     wallTile.style.backgroundColor = "var(--" + top + ")";
+            // }
+            // if (bot == "stone-wall") {
+            //     let wallTile = document.querySelector('button[position="' + (shiftedCol - 1) + ',' + shiftedRow +'"]');
+            //     wallTile.style.backgroundColor = "var(--" + bot + ")";
+            // }
+
         }
     }
-
 }
 
 onload = changeMapTo(8,8);
