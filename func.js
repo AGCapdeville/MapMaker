@@ -168,7 +168,7 @@ function saveMapToJSON() {
                 break;
         }
         tileObject.cell = cell; // [space, void, stone-wall, no-wall, dirt, grass, stone, river]
-        tileObjectDictionary[position[1] + ",0," + position[0]] = tileObject; // Filped due to X being horizontal & Z is depth
+        tileObjectDictionary[position[0] + ",0," + position[1]] = tileObject; // Filped due to X being horizontal & Z is depth
     });
 
 
