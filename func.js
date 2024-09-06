@@ -244,7 +244,6 @@ function loadJSONMap(inputElement) {
             if (!loadedJSON.hasOwnProperty("0,0,0")) {
                 console.log('Foundation Key Not Found!');
             } else {
-                console.log(loadedJSON);
                 handleLoadedJSON(loadedJSON);
             }
 
@@ -256,55 +255,43 @@ function loadJSONMap(inputElement) {
 }
 
 function handleLoadedJSON(JSON) {
-    changeMapTo(JSON.rows,JSON.cols);
+    changeMapTo(JSON.rows, JSON.cols);
     
-    const tiles = document.querySelectorAll('.grid-container button');
+    for (let z = 0; z < JSON.rows; z++) {
+        for (let x = 0; x < JSON.cols; x++) {
+            shiftedZ = 2 * z + 1;
+            shiftedX = 2 * x + 1;
 
-    console.log('[' + JSON.rows + ',' + JSON.cols + ']');
-    console.log(JSON);
+            let currentSpace = document.querySelector('button[position="' + shiftedZ + ',' + shiftedX +'"]');
+            let currentJSONTile = JSON[x + ',0,' + z];
 
-    for (let row = 0; row < JSON.rows; row++) {
-        for (let col = 0; col < JSON.cols; col++) {
-            shiftedRow = 2 * row + 1;
-            shiftedCol = 2 * col + 1;
+            currentSpace.style.backgroundColor = "var(--" + currentJSONTile.cell + ')'; 
 
-            let currentSpace = document.querySelector('button[position="' + shiftedRow + ',' + shiftedCol +'"]');
-            let currentJSONTile = JSON[row + ',0,' + col];
+            if (currentJSONTile.hasOwnProperty("obj")) {
+                paintObject(currentSpace, currentJSONTile.obj);
+            }
 
-            console.log("JSON Location:[" + row + ',' + col + ']');
-            console.log("Mapped to map:[" + shiftedRow + ',' + shiftedCol + ']');
+            let right = currentJSONTile["1,0,0"];
+            let left = currentJSONTile["-1,0,0"];
+            let top = currentJSONTile["0,0,1"];
+            let bot = currentJSONTile["0,0,-1"];
 
-            console.log("IN JSON: " + currentJSONTile);
-            console.log("IN MAP: " + currentSpace)
-            // console.log(currentJSONTile);
-
-            // currentSpace.style.backgroundColor = "var(--" + currentJSONTile.cell + ')'; 
-
-            // if (currentJSONTile.hasOwnProperty("obj")) {
-                // paintObject(currentSpace, currentJSONTile.obj);
-            // }
-
-            // let right = currentJSONTile["1,0,0"];
-            // let left = currentJSONTile["-1,0,0"];
-            // let top = currentJSONTile["0,0,1"];
-            // let bot = currentJSONTile["0,0,-1"];
-
-            // if (right == "stone-wall") {
-            //     let wallTile = document.querySelector('button[position="' + shiftedRow + ',' + (shiftedCol + 1) +'"]');
-            //     wallTile.style.backgroundColor = "var(--" + right + ")";
-            // }
-            // if (left == "stone-wall") {
-            //     let wallTile = document.querySelector('button[position="' + shiftedCol + ',' + (shiftedRow - 1) +'"]');
-            //     wallTile.style.backgroundColor = "var(--" + left + ")";
-            // }
-            // if (top == "stone-wall") {
-            //     let wallTile = document.querySelector('button[position="' + (shiftedCol + 1) + ',' + shiftedRow +'"]');
-            //     wallTile.style.backgroundColor = "var(--" + top + ")";
-            // }
-            // if (bot == "stone-wall") {
-            //     let wallTile = document.querySelector('button[position="' + (shiftedCol - 1) + ',' + shiftedRow +'"]');
-            //     wallTile.style.backgroundColor = "var(--" + bot + ")";
-            // }
+            if (right == "stone-wall") {
+                let wallTile = document.querySelector('button[position="' + shiftedZ + ',' + (shiftedX + 1) +'"]');
+                wallTile.style.backgroundColor = "var(--" + right + ")";
+            }
+            if (left == "stone-wall") {
+                let wallTile = document.querySelector('button[position="' + shiftedZ + ',' + (shiftedX - 1) +'"]');
+                wallTile.style.backgroundColor = "var(--" + left + ")";
+            }
+            if (top == "stone-wall") {
+                let wallTile = document.querySelector('button[position="' + (shiftedZ + 1) + ',' + shiftedX +'"]');
+                wallTile.style.backgroundColor = "var(--" + top + ")";
+            }
+            if (bot == "stone-wall") {
+                let wallTile = document.querySelector('button[position="' + (shiftedZ - 1) + ',' + shiftedX +'"]');
+                wallTile.style.backgroundColor = "var(--" + bot + ")";
+            }
 
         }
     }
