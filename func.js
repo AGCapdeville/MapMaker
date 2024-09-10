@@ -174,9 +174,13 @@ function saveMapToJSON() {
 
     const validSpaces = ["space", "dirt", "grass", "stone", "river"];
     const walls = ["stone-wall"];
-    const cardinal_directions = [{x: 0, z: 1}, {x: 1, z: 0}, {x: 0, z: -1}, {x: -1, z: 0}];
+    const cardinal_directions = {
+        "north":{x: 0, z: 1},
+        "east":{x: 1, z: 0}, 
+        "south":{x: 0, z: -1}, 
+        "west":{x: -1, z: 0}
+    };
 
-    // tileObjectDictionary.forEach((key, value) => {
     Object.entries(tileObjectDictionary).forEach(([key, value]) => {
 
         if (validSpaces.includes(value.cell)) {
@@ -184,14 +188,14 @@ function saveMapToJSON() {
             let current_x = Number(key.split(',')[0]);
             let current_z = Number(key.split(',')[2]);
 
-            cardinal_directions.forEach((diriection) => {
+            Object.entries(cardinal_directions).forEach(([k, v]) => {
 
-                let check_position = (current_x + diriection.x) + ",0," + (current_z + diriection.z);
+                let check_position = (current_x + v.x) + ",0," + (current_z + v.z);
 
                 if (walls.includes(tileObjectDictionary[check_position].cell)) {
-                    tileObjectDictionary[key][(diriection.x + ",0," + diriection.z)] = "stone-wall";
+                    tileObjectDictionary[key][k] = "stone-wall";
                 } else {
-                    tileObjectDictionary[key][(diriection.x + ",0," + diriection.z)] = "no-wall";
+                    tileObjectDictionary[key][k] = "no-wall";
                 }
             });
         }
@@ -271,26 +275,26 @@ function handleLoadedJSON(JSON) {
                 paintObject(currentSpace, currentJSONTile.obj);
             }
 
-            let right = currentJSONTile["1,0,0"];
-            let left = currentJSONTile["-1,0,0"];
-            let top = currentJSONTile["0,0,1"];
-            let bot = currentJSONTile["0,0,-1"];
+            let north = currentJSONTile["north"];   // north: " 0, 0, 1"
+            let east = currentJSONTile["east"]; // east:  " 1, 0, 0"
+            let south = currentJSONTile["south"];  // south: " 0, 0,-1"
+            let west = currentJSONTile["west"]; // west:  "-1, 0, 0"
 
-            if (right == "stone-wall") {
-                let wallTile = document.querySelector('button[position="' + shiftedZ + ',' + (shiftedX + 1) +'"]');
-                wallTile.style.backgroundColor = "var(--" + right + ")";
-            }
-            if (left == "stone-wall") {
-                let wallTile = document.querySelector('button[position="' + shiftedZ + ',' + (shiftedX - 1) +'"]');
-                wallTile.style.backgroundColor = "var(--" + left + ")";
-            }
-            if (top == "stone-wall") {
+            if (north == "stone-wall") {
                 let wallTile = document.querySelector('button[position="' + (shiftedZ + 1) + ',' + shiftedX +'"]');
-                wallTile.style.backgroundColor = "var(--" + top + ")";
+                wallTile.style.backgroundColor = "var(--" + north + ")";
             }
-            if (bot == "stone-wall") {
+            if (east == "stone-wall") {
+                let wallTile = document.querySelector('button[position="' + shiftedZ + ',' + (shiftedX + 1) +'"]');
+                wallTile.style.backgroundColor = "var(--" + east + ")";
+            }
+            if (south == "stone-wall") {
                 let wallTile = document.querySelector('button[position="' + (shiftedZ - 1) + ',' + shiftedX +'"]');
-                wallTile.style.backgroundColor = "var(--" + bot + ")";
+                wallTile.style.backgroundColor = "var(--" + south + ")";
+            }
+            if (west == "stone-wall") {
+                let wallTile = document.querySelector('button[position="' + shiftedZ + ',' + (shiftedX - 1) +'"]');
+                wallTile.style.backgroundColor = "var(--" + west + ")";
             }
 
         }
