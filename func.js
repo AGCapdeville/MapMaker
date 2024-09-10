@@ -197,10 +197,10 @@ function saveMapToJSON() {
         }
     });
 
-    let onlySpacesDictionary = {};
+    let onlySpacesDictionary = {"map":{}};
     Object.entries(tileObjectDictionary).forEach(([key, value]) => {
         if (validSpaces.includes(value.cell)) {
-            onlySpacesDictionary[(key.split(',')[0]/2 - 0.5) + ',0,' + (key.split(',')[2]/2 - 0.5)] = value;
+            onlySpacesDictionary.map[(key.split(',')[0]/2 - 0.5) + ',0,' + (key.split(',')[2]/2 - 0.5)] = value;
         }
     });
 
@@ -241,7 +241,7 @@ function loadJSONMap(inputElement) {
                 }
             }
 
-            if (!loadedJSON.hasOwnProperty("0,0,0")) {
+            if (!loadedJSON.map.hasOwnProperty("0,0,0")) {
                 console.log('Foundation Key Not Found!');
             } else {
                 handleLoadedJSON(loadedJSON);
@@ -263,7 +263,7 @@ function handleLoadedJSON(JSON) {
             shiftedX = 2 * x + 1;
 
             let currentSpace = document.querySelector('button[position="' + shiftedZ + ',' + shiftedX +'"]');
-            let currentJSONTile = JSON[x + ',0,' + z];
+            let currentJSONTile = JSON.map[x + ',0,' + z];
 
             currentSpace.style.backgroundColor = "var(--" + currentJSONTile.cell + ')'; 
 
