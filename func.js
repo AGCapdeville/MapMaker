@@ -21,41 +21,41 @@ function changeMapTo(row_length, col_length) {
     for (let row = (row_length * 2); row > -1; row--) {
         for (let col = 0; col < (col_length * 2 + 1); col++) {
             
-            let cell = document.createElement("button");
-            cell.id = "cellTile";
-            cell.classList.add("cell");
-            cell.setAttribute("position", row + ',' + col);
+            let tile = document.createElement("button");
+            tile.id = "tile";
+            tile.classList.add("cell");
+            tile.setAttribute("position", row + ',' + col);
 
             if (row % 2 == 0 && col % 2 == 0) {
-                cell.classList.add("void");
+                tile.classList.add("void");
             } else if (row % 2 != 0 && col % 2 != 0) {
-                cell.classList.add("space");
-                cell.onclick = function() {
+                tile.classList.add("space");
+                tile.onclick = function() {
                     paintSpace(this);
                 };
             } else {
                 if (row % 2 == 0) {
-                    cell.classList.add("horizontal-wall");
+                    tile.classList.add("horizontal-wall");
                 } else {
-                    cell.classList.add("vertical-wall");
+                    tile.classList.add("vertical-wall");
                 }
-                cell.onclick = function() {
+                tile.onclick = function() {
                     paintWall(this);
                 }
             }
 
-            gridContainer.appendChild(cell);   
+            gridContainer.appendChild(tile);   
         }        
     }
 
-    const cells = document.querySelectorAll('.grid-container button');
+    const tiles = document.querySelectorAll('.grid-container button');
 
-    cells.forEach(c => {
-        c.addEventListener("mouseover", function() {
+    tiles.forEach(t => {
+        t.addEventListener("mouseover", function() {
             if (IS_DRAGGING) {
-                c.click();
+                t.click();
             }
-            let pos = c.getAttribute("position").split(',');
+            let pos = t.getAttribute("position").split(',');
             document.getElementById("currentTile").innerHTML = '[' + (pos[0]/2 - 0.5) + ',' + (pos[1]/2 - 0.5)  + ']';
         });
     });
@@ -136,38 +136,38 @@ function saveMapToJSON() {
             tileObject.obj = null;
         }
 
-        let cell = "space"
+        let terrain = "space"
         let color = window.getComputedStyle(tile).backgroundColor;
         switch (color) {
             case "rgb(245, 245, 245)": // empty space
-                cell = "space";
+                terrain = "space";
                 break;
             case "rgb(0, 0, 0)":
-                cell = "void";
+                terrain = "void";
                 break;
             case "rgb(64, 42, 35)":
-                cell = "dirt";
+                terrain = "dirt";
                 break;
             case "rgb(35, 64, 40)":
-                cell = "grass";
+                terrain = "grass";
                 break;
             case "rgb(80, 80, 80)":
-                cell = "stone";
+                terrain = "stone";
                 break;
             case "rgb(0, 83, 154)":
-                cell = "river";
+                terrain = "river";
                 break;
             case "rgb(46, 46, 46)":
-                cell = "stone-wall";
+                terrain = "stone-wall";
                 break;
             case "rgb(200, 200, 200)":
-                cell = "no-wall";
+                terrain = "no-wall";
                 break;
             default:
-                cell = "space";
+                terrain = "space";
                 break;
         }
-        tileObject.cell = cell; // [space, void, stone-wall, no-wall, dirt, grass, stone, river]
+        tileObject.terrain = terrain; // [space, void, stone-wall, no-wall, dirt, grass, stone, river]
         tileObjectDictionary[position[1] + ",0," + position[0]] = tileObject; // Filped due to X being horizontal & Z is depth
     });
 
@@ -183,7 +183,7 @@ function saveMapToJSON() {
 
     Object.entries(tileObjectDictionary).forEach(([key, value]) => {
 
-        if (validSpaces.includes(value.cell)) {
+        if (validSpaces.includes(value.terrain)) {
             
             let current_x = Number(key.split(',')[0]);
             let current_z = Number(key.split(',')[2]);
@@ -192,7 +192,7 @@ function saveMapToJSON() {
 
                 let check_position = (current_x + v.x) + ",0," + (current_z + v.z);
 
-                if (walls.includes(tileObjectDictionary[check_position].cell)) {
+                if (walls.includes(tileObjectDictionary[check_position].terrain)) {
                     tileObjectDictionary[key][k] = "stone-wall";
                 } else {
                     tileObjectDictionary[key][k] = "no-wall";
@@ -203,7 +203,7 @@ function saveMapToJSON() {
 
     let onlySpacesDictionary = {"map":{}};
     Object.entries(tileObjectDictionary).forEach(([key, value]) => {
-        if (validSpaces.includes(value.cell)) {
+        if (validSpaces.includes(value.terrain)) {
             onlySpacesDictionary.map[(key.split(',')[0]/2 - 0.5) + ',0,' + (key.split(',')[2]/2 - 0.5)] = value;
         }
     });
@@ -269,7 +269,7 @@ function handleLoadedJSON(JSON) {
             let currentSpace = document.querySelector('button[position="' + shiftedZ + ',' + shiftedX +'"]');
             let currentJSONTile = JSON.map[x + ',0,' + z];
 
-            currentSpace.style.backgroundColor = "var(--" + currentJSONTile.cell + ')'; 
+            currentSpace.style.backgroundColor = "var(--" + currentJSONTile.terrain + ')'; 
 
             if (currentJSONTile.hasOwnProperty("obj")) {
                 paintObject(currentSpace, currentJSONTile.obj);
