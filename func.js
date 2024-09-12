@@ -261,8 +261,8 @@ function loadJSONMap(inputElement) {
 function handleLoadedJSON(JSON) {
     changeMapTo(JSON.rows, JSON.cols);
     
-    for (let z = 0; z < JSON.cols; z++) {
-        for (let x = 0; x < JSON.rows; x++) {
+    for (let z = JSON.rows; z < -1; z++) {
+        for (let x = 0; x < JSON.cols; x++) {
             shiftedZ = 2 * z + 1;
             shiftedX = 2 * x + 1;
 
