@@ -14,9 +14,6 @@ function changeMapTo(row_length, col_length) {
 
     localStorage.setItem("rows", row_length);
     localStorage.setItem("cols", col_length);
-
-    // for (let row = 0; row < (row_length * 2 + 1); row++) {
-    //     for (let col = 0; col < (col_length * 2 + 1); col++) {
             
     for (let row = (row_length * 2); row > -1; row--) {
         for (let col = 0; col < (col_length * 2 + 1); col++) {
@@ -168,13 +165,13 @@ function saveMapToJSON() {
                 break;
         }
         tileObject.terrain = terrain; // [space, void, stone-wall, no-wall, dirt, grass, stone, river]
-        tileObjectDictionary[position[0] + ",0," + position[1]] = tileObject; // Filped due to X being horizontal & Z is depth
+        tileObjectDictionary[position[0] + ",0," + position[1]] = tileObject;
     });
 
 
     const validSpaces = ["space", "dirt", "grass", "stone", "river"];
     const walls = ["stone-wall"];
-    
+
     // since Z is depth, we use x 
     const cardinal_directions = {
         "north":{x: 1, z: 0},
